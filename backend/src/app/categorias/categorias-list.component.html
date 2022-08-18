@@ -1,0 +1,84 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2">
+    Categorias
+    <ng-container *ngIf="loading">
+      <app-spinner></app-spinner>
+    </ng-container>
+  </h1>
+</div>
+
+<div class="row" *ngIf="errorMessage">
+  <div class="col-sm-12">
+    <p class="alert alert-danger">{{ errorMessage }}</p>
+  </div>
+</div>
+
+<div *ngIf="categoriasList">
+  <div class="row mb-2">
+    <div class="col-12"><strong>Total:</strong> {{ totalCount }}</div>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-sm table-striped table-bordered table-valign-middle">
+      <thead>
+        <tr>
+          <th class="text-center">#</th>
+          <th>Nome</th>
+          <th class="text-center">Cadastrado em</th>
+          <th class="text-center">Atualizado em</th>
+          <th class="text-center">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let categorias of categoriasList.rows">
+          <td class="text-center">
+            {{ categorias.id }}
+          </td>
+          <td>
+            {{ categorias.nome }}
+          </td>
+
+          <td class="text-center">
+            {{ categorias.create_at }}
+          </td>
+
+          <td class="text-center">
+            {{ categorias.update_at }}
+          </td>
+
+          <td class="text-center">
+            <div *ngIf="categorias">
+              <button class="btn btn-secondary btn-sm" type="button" (click)="viewCategorias(categorias)">
+                <i class="fa fa-edit"></i>
+              </button>
+              &nbsp;
+              <button class="btn btn-danger btn-sm" type="button" (click)="confirmDeleteCategorias(categorias)">
+                <i class="fa fa-remove"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="row">
+    <div class="col-12 col-sm-8">
+      <pagination [totalItems]="totalCount" [(ngModel)]="currentPage" [boundaryLinks]="true" [directionLinks]="true"
+        [maxSize]="5" [itemsPerPage]="pageSize" (pageChanged)="pageChanged($event)"></pagination>
+    </div>
+    <div class="col-12 col-sm-4 text-right">
+      <a class="btn btn-primary ml-1" [routerLink]="['/categorias', 'create']" routerLinkActive="active"><i
+          class="fa fa-plus-square"></i> Criar Categorias</a>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 col-sm-6"></div>
+    <div class="col-12 col-sm-6 text-right">
+      <form class="form-inline float-right" (ngSubmit)="onSearchFormSubmit()" novalidate>
+        <input type="text" class="form-control" id="search-q" placeholder="" [(ngModel)]="searchParams['q']" name="q" />
+        <button class="btn btn-info ml-1" type="submit"><i class="fa fa-search" aria-hidden="true"></i>
+          Pesquisar</button>
+      </form>
+    </div>
+  </div>
+</div>
